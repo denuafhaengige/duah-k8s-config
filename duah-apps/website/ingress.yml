@@ -12,9 +12,9 @@ spec:
   - host: denuafhaengige.dk
     http:
       paths:
-      - backend:
-          path: /
-          pathType: Prefix
+      - path: /
+        pathType: Prefix 
+        backend:
           service:
             name: duah-website-svc
             port:
@@ -39,9 +39,9 @@ spec:
   - host: beta.denuafhaengige.dk
     http:
       paths:
-      - backend:
-          path: /
-          pathType: Prefix 
+      - path: /
+        pathType: Prefix 
+        backend:
           service:
             name: duah-website-svc
             port:
