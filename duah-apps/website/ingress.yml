@@ -1,0 +1,92 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: duah-website-ingress
+  namespace: duah-apps
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-http-prod
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      proxy_set_header DUAH-Feature-Schedule enable;
+spec:
+  rules:
+  - host: denuafhaengige.dk
+    http:
+      paths:
+      - backend:    
+          serviceName: duah-website-svc
+          servicePort: 80
+  tls:
+  - secretName: duah-website-tls-cert
+    hosts:
+    - denuafhaengige.dk
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: duah-beta-website-ingress
+  namespace: duah-apps
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-http-prod
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      proxy_set_header DUAH-Beta enable;
+      proxy_set_header DUAH-Feature-Schedule enable;
+spec:
+  rules:
+  - host: beta.denuafhaengige.dk
+    http:
+      paths:
+      - backend:    
+          serviceName: duah-website-svc
+          servicePort: 80
+  tls:
+  - secretName: duah-beta-website-tls-cert
+    hosts:
+    - beta.denuafhaengige.dk
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: duah-website-ingress-redirect
+  namespace: duah-apps
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-http-prod
+    nginx.ingress.kubernetes.io/permanent-redirect: https://denuafhaengige.dk$request_uri
+spec:
+  rules:
+  - host: xn--denuafhngige-ddb.dk
+  - host: denuafhangige.dk
+  - host: duah.dk
+  - host: www.xn--denuafhngige-ddb.dk
+  - host: www.denuafhangige.dk
+  - host: www.duah.dk
+  - host: www.denuafhaengige.dk
+  tls:
+  - secretName: duah-website-redirect-tls-cert
+    hosts:
+    - xn--denuafhngige-ddb.dk
+    - denuafhangige.dk
+    - duah.dk
+    - www.xn--denuafhngige-ddb.dk
+    - www.denuafhangige.dk
+    - www.duah.dk
+    - www.denuafhaengige.dk
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: beta-duah-website-ingress-redirect
+  namespace: duah-apps
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-http-prod
+    nginx.ingress.kubernetes.io/permanent-redirect: https://beta.denuafhaengige.dk$request_uri
+spec:
+  rules:
+  - host: beta.xn--denuafhngige-ddb.dk
+  - host: beta.denuafhangige.dk
+  - host: beta.duah.dk
+  tls:
+  - secretName: beta-duah-website-redirect-tls-cert
+    hosts:
+    - beta.xn--denuafhngige-ddb.dk
+    - beta.denuafhangige.dk
+    - beta.duah.dk
