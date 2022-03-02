@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: duah-shared-conf
+  namespace: duah-apps
+data:
+  http-listening-port: "80"
+  rtmp-listening-port: "1935"
+  graph-endpoint: "https://graph.denuafhaengige.dk"
+  payment-endpoint: "https://payment.denuafhaengige.dk"
+  identity-endpoint: "http://duah-identity-svc"
+  facebook-endpoint: "http://duah-facebook-api-svc"
+  radio-endpoint: "https://radio.denuafhaengige.dk"
+  radio-endpoint-override: "https://duah.out.airtime.pro/duah_a"
+  aad-tenant: duah.onmicrosoft.com
+  aad-application-client-id: d73aa9d8-cb90-4f1e-9405-99764a4da477
+  aad-react-application-client-id: 68026159-c560-45f1-9ac3-9fd6dbcb4b54
+  aad-react-redirect-url: https://admin.denuafhaengige.dk
+  force-database-schema-sync: "false"
+  file-storage-path: /mnt/blob
+  file-storage-url-path: /files
+  redis-host: redis-master
+  mobilepay-api-endpoint: https://api.mobilepay.dk
+  mobilepay-discover-endpoint: https://admin.mobilepay.dk/account/.well-known/openid-configuration
+  mobilepay-merchant-client-id: kontoretjuhl
+  mobilepay-merchant-provider-id: 1bd9fafe-99df-4297-8a57-4bee6000fd23
+  mobilepay-application-client-id: aee03c79-7ae1-4164-878d-4578a5d1d2e8
+  mobilepay-redirect-uri: https://denuafhaengige.dk/payment/mobilepay/redirect
+  facebook-page-id: "109353017354736"
+  mailchimp-audience-id: 6abcff6d52
+  application-insights-instrumentation-key: 037225bc-4fcc-4a2a-9c09-77aedf563fe2
+  temp-storage-path: /opt/data
+  streaming-segment-recordings-file-path: /opt/data/recording/segments
+  streaming-single-file-recordings-file-path: /opt/data/recording/single
+  streaming-internal-http-service-listening-port: "8080"
+  streaming-rtmp-input-host: "duah-rtmp-input-svc"
+  streaming-vod-host: "duah-vod-svc"
+  streaming-vod-base-url: "https://stream.denuafhaengige.dk/vod"
+  streaming-nginx-access-log-path: /proc/1/fd/1
+  streaming-nginx-error-log-path: /proc/1/fd/1
+  streaming-nginx-tail-log-files: "false"
+  streaming-nginx-mime-types-path: /etc/nginx/mime.types
+  streaming-nginx-log-level: warn
+  streaming-icecast-hostname: radio.denuafhaengige.dk
+  streaming-icecast-tls-certificate-path: /mnt/tls/tls.crt
+  streaming-icecast-tls-key-path: /mnt/tls/tls.key
+  streaming-icecast-uid: "9000"
+  streaming-icecast-master-hostname: duah-icecast-master-svc
+  streaming-icecast-master-port: "80"
+  streaming-icecast-log-level: "4"
+  auth-issuer-base-url: https://denuafhaengige.eu.auth0.com
+  auth-audience: https://duah.api
+  auth-jwks-uri: https://denuafhaengige.eu.auth0.com/.well-known/jwks.json
