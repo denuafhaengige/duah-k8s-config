@@ -12,9 +12,11 @@ spec:
   - host: denuafhaengige.dk
     http:
       paths:
-      - backend:    
-          serviceName: duah-website-svc
-          servicePort: 80
+      - backend:
+          service:
+            name: duah-website-svc
+            port:
+              number: 80
   tls:
   - secretName: duah-website-tls-cert
     hosts:
@@ -36,8 +38,10 @@ spec:
     http:
       paths:
       - backend:    
-          serviceName: duah-website-svc
-          servicePort: 80
+          service:
+            name: duah-website-svc
+            port:
+              number: 80
   tls:
   - secretName: duah-beta-website-tls-cert
     hosts:
