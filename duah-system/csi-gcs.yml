@@ -3,8 +3,4 @@ kind: Kustomization
 bases:
   - github.com/ofek/csi-gcs/deploy/overlays/stable-gke?ref=v0.8.0
 patchesStrategicMerge:
-  - |-
-    apiVersion: apps/v1
-    kind: DaemonSet
-    metadata:
-      name: csi-gcs
+  - csi-gcs-merge.yml
