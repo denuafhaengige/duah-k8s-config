@@ -1,4 +1,4 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-resources:
+bases:
   - github.com/ofek/csi-gcs/deploy/overlays/stable-gke?ref=v0.8.0
