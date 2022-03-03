@@ -35,3 +35,4 @@ spec:
         default: true
       service:
         loadBalancerIP: "34.88.189.185"
+---
