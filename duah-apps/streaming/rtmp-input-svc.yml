@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: duah-rtmp-input-svc
+  namespace: duah-apps
+  labels:
+    app: duah-rtmp-input
+spec:
+  type: ClusterIP
+  selector:
+    app: duah-rtmp-input
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-resource-group: duah-rg
+  name: duah-rtmp-input-public-svc
+  namespace: duah-apps
+spec:
+  loadBalancerIP: 20.86.225.75
+  ports:
+  - name: rtmp
+    port: 1935
+    protocol: TCP
+  selector:
+    app: duah-rtmp-input
+  type: LoadBalancer

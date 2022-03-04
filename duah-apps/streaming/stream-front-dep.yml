@@ -1,0 +1,130 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: duah-stream-front-dep
+  namespace: duah-apps
+  labels:
+    app: duah-stream-front
+spec:
+  replicas: 2
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: duah-stream-front
+  template:
+    metadata:
+      labels:
+        app: duah-stream-front
+    spec:
+      containers:
+      - name: duah-live-front
+        image: ghcr.io/denuafhaengige/duah-streaming:sha-22a6595
+        imagePullPolicy: IfNotPresent
+        args:
+        - --mode
+        - stream-front
+        env:
+        - name: DUAH_FILE_STORAGE_PATH
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: file-storage-path
+        - name: DUAH_REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: redis-host
+        - name: DUAH_DATABASE_URI
+          valueFrom:
+            secretKeyRef:
+              name: duah-shared-secret
+              key: database-uri
+        - name: DUAH_REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: duah-shared-secret
+              key: redis-password
+        - name: DUAH_APP_INSIGHTS_I_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: application-insights-instrumentation-key
+        - name: DUAH_TEMP_STORAGE_PATH
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: temp-storage-path
+        - name: DUAH_STREAMING_NGINX_ACCESS_LOG_PATH
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: streaming-nginx-access-log-path
+        - name: DUAH_STREAMING_NGINX_ERROR_LOG_PATH
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: streaming-nginx-error-log-path
+        - name: DUAH_STREAMING_NGINX_TAIL_LOG_FILES
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: streaming-nginx-tail-log-files
+        - name: DUAH_STREAMING_NGINX_MIME_TYPES_PATH
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: streaming-nginx-mime-types-path
+        - name: DUAH_STREAMING_RTMP_INPUT_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: streaming-rtmp-input-host
+        - name: DUAH_STREAMING_VOD_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: streaming-vod-host
+        - name: DUAH_STREAMING_NGINX_LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: streaming-nginx-log-level
+        volumeMounts:
+        - name: duah-shared-storage
+          mountPath: /mnt/shared-storage
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        - name: health
+          containerPort: 9090
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 64m
+            memory: 256Mi
+          requests:
+            cpu: 32m
+            memory: 128Mi
+        livenessProbe:
+          httpGet:
+            path: /healthz/live
+            port: health
+          failureThreshold: 3
+          periodSeconds: 10
+          initialDelaySeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /healthz/ready
+            port: health
+          failureThreshold: 3
+          periodSeconds: 10
+          initialDelaySeconds: 30
+      volumes:
+      - name: duah-shared-storage
+        persistentVolumeClaim:
+          claimName: duah-shared-storage-pvc

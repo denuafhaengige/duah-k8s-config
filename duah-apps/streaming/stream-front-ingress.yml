@@ -1,0 +1,43 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: duah-stream-front-ingress
+  namespace: duah-apps
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-http-prod
+spec:
+  rules:
+  - host: stream.denuafhaengige.dk
+    http:
+      paths:
+      - path: /
+        pathType: Prefix 
+        backend:
+          service:
+            name: duah-stream-front-svc
+            port:
+              number: 80
+  tls:
+  - secretName: duah-stream-front-tls-cert
+    hosts:
+    - stream.denuafhaengige.dk
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: duah-stream-front-redirect-ingress
+  namespace: duah-apps
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-http-prod
+    nginx.ingress.kubernetes.io/permanent-redirect: https://stream.denuafhaengige.dk$request_uri
+spec:
+  rules:
+  - host: stream.xn--denuafhngige-ddb.dk
+  - host: stream.denuafhangige.dk
+  - host: stream.duah.dk
+  tls:
+  - secretName: duah-stream-front-redirect-tls-cert
+    hosts:
+    - stream.xn--denuafhngige-ddb.dk
+    - stream.denuafhangige.dk
+    - stream.duah.dk
