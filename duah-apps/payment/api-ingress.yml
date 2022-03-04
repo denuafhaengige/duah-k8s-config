@@ -1,0 +1,43 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: duah-payment-api-ingress
+  namespace: duah-apps
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-http-prod
+spec:
+  rules:
+  - host: payment.denuafhaengige.dk
+    http:
+      paths:
+      - path: /
+        pathType: Prefix 
+        backend:
+          service:
+            name: duah-payment-api-svc
+            port:
+              number: 80
+  tls:
+  - secretName: duah-payment-api-tls-cert
+    hosts:
+    - payment.denuafhaengige.dk
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: duah-payment-api-redirect-ingress
+  namespace: duah-apps
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-http-prod
+    nginx.ingress.kubernetes.io/permanent-redirect: https://payment.denuafhaengige.dk$request_uri
+spec:
+  rules:
+  - host: payment.xn--denuafhngige-ddb.dk
+  - host: payment.denuafhangige.dk
+  - host: payment.duah.dk
+  tls:
+  - secretName: duah-payment-api-redirect-tls-cert
+    hosts:
+    - payment.xn--denuafhngige-ddb.dk
+    - payment.denuafhangige.dk
+    - payment.duah.dk
