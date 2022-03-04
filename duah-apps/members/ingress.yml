@@ -4,7 +4,7 @@ metadata:
   name: duah-members-ingress
   namespace: duah-apps
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-http-prod
+    cert-manager.io/cluster-issuer: letsencrypt-dns-prod
     nginx.ingress.kubernetes.io/proxy-body-size: 10m
 spec:
   rules:
@@ -29,7 +29,7 @@ metadata:
   name: duah-members-redirect-ingress
   namespace: duah-apps
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-http-prod
+    cert-manager.io/cluster-issuer: letsencrypt-dns-prod
     nginx.ingress.kubernetes.io/permanent-redirect: https://members.denuafhaengige.dk$request_uri
 spec:
   rules:

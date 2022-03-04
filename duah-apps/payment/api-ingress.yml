@@ -4,7 +4,7 @@ metadata:
   name: duah-payment-api-ingress
   namespace: duah-apps
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-http-prod
+    cert-manager.io/cluster-issuer: letsencrypt-dns-prod
 spec:
   rules:
   - host: payment.denuafhaengige.dk
@@ -28,7 +28,7 @@ metadata:
   name: duah-payment-api-redirect-ingress
   namespace: duah-apps
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-http-prod
+    cert-manager.io/cluster-issuer: letsencrypt-dns-prod
     nginx.ingress.kubernetes.io/permanent-redirect: https://payment.denuafhaengige.dk$request_uri
 spec:
   rules:

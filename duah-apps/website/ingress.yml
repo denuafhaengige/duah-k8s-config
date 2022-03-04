@@ -4,7 +4,7 @@ metadata:
   name: duah-website-ingress
   namespace: duah-apps
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-http-prod
+    cert-manager.io/cluster-issuer: letsencrypt-dns-prod
     nginx.ingress.kubernetes.io/configuration-snippet: |
       proxy_set_header DUAH-Feature-Schedule enable;
 spec:
@@ -30,7 +30,7 @@ metadata:
   name: duah-beta-website-ingress
   namespace: duah-apps
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-http-prod
+    cert-manager.io/cluster-issuer: letsencrypt-dns-prod
     nginx.ingress.kubernetes.io/configuration-snippet: |
       proxy_set_header DUAH-Beta enable;
       proxy_set_header DUAH-Feature-Schedule enable;
@@ -57,7 +57,7 @@ metadata:
   name: duah-website-ingress-redirect
   namespace: duah-apps
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-http-prod
+    cert-manager.io/cluster-issuer: letsencrypt-dns-prod
     nginx.ingress.kubernetes.io/permanent-redirect: https://denuafhaengige.dk$request_uri
 spec:
   rules:
@@ -85,7 +85,7 @@ metadata:
   name: beta-duah-website-ingress-redirect
   namespace: duah-apps
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-http-prod
+    cert-manager.io/cluster-issuer: letsencrypt-dns-prod
     nginx.ingress.kubernetes.io/permanent-redirect: https://beta.denuafhaengige.dk$request_uri
 spec:
   rules:

@@ -4,7 +4,7 @@ metadata:
   name: duah-graph-ingress
   namespace: duah-apps
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-http-prod
+    cert-manager.io/cluster-issuer: letsencrypt-dns-prod
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
@@ -32,7 +32,7 @@ metadata:
   name: duah-graph-redirect-ingress
   namespace: duah-apps
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-http-prod
+    cert-manager.io/cluster-issuer: letsencrypt-dns-prod
     nginx.ingress.kubernetes.io/permanent-redirect: https://graph.denuafhaengige.dk$request_uri
 spec:
   rules:
