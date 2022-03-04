@@ -1,0 +1,43 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: duah-admin-ingress
+  namespace: duah-apps
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-http-prod
+spec:
+  rules:
+  - host: admin.denuafhaengige.dk
+    http:
+      paths:
+      - path: /
+        pathType: Prefix 
+        backend:
+          service:
+            name: duah-admin-svc
+            port:
+              number: 80
+  tls:
+  - secretName: duah-admin-tls-cert
+    hosts:
+    - admin.denuafhaengige.dk
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: duah-admin-redirect-ingress
+  namespace: duah-apps
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-http-prod
+    nginx.ingress.kubernetes.io/permanent-redirect: https://admin.denuafhaengige.dk$request_uri
+spec:
+  rules:
+  - host: admin.xn--denuafhngige-ddb.dk
+  - host: admin.denuafhangige.dk
+  - host: admin.duah.dk
+  tls:
+  - secretName: duah-admin-redirect-tls-cert
+    hosts:
+    - admin.xn--denuafhngige-ddb.dk
+    - admin.denuafhangige.dk
+    - admin.duah.dk
