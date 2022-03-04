@@ -1,0 +1,16 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: duah-shared-storage-pvc
+  namespace: duah-apps
+  annotations:
+    gcs.csi.ofek.dev/location: europe-north1
+    gcs.csi.ofek.dev/bucket: denuafhaengige-duah-standard-storage-bucket
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Ti
+  storageClassName: csi-gcs-duah-sc
