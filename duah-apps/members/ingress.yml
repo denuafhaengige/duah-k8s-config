@@ -1,0 +1,44 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: duah-members-ingress
+  namespace: duah-apps
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-http-prod
+    nginx.ingress.kubernetes.io/proxy-body-size: 10m
+spec:
+  rules:
+  - host: members.denuafhaengige.dk
+    http:
+      paths:
+      - path: /
+        pathType: Prefix 
+        backend:
+          service:
+            name: duah-members-svc
+            port:
+              number: 80
+  tls:
+  - secretName: duah-members-tls-cert
+    hosts:
+    - members.denuafhaengige.dk
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: duah-members-redirect-ingress
+  namespace: duah-apps
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-http-prod
+    nginx.ingress.kubernetes.io/permanent-redirect: https://members.denuafhaengige.dk$request_uri
+spec:
+  rules:
+  - host: members.xn--denuafhngige-ddb.dk
+  - host: members.denuafhangige.dk
+  - host: members.duah.dk
+  tls:
+  - secretName: duah-members-redirect-tls-cert
+    hosts:
+    - members.xn--denuafhngige-ddb.dk
+    - members.denuafhangige.dk
+    - members.duah.dk
