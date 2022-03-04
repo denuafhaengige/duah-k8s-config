@@ -17,7 +17,7 @@ metadata:
   namespace: duah-apps
 spec:
   imageRepositoryRef:
-    name: image-repo
+    name: duah-admin-image-repo
   filterTags:
     pattern: '^master-[a-f0-9]+-(?P<ts>[0-9]+)'
     extract: '$ts'
