@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: duah-admin
-        image: ghcr.io/denuafhaengige/duah-admin:sha-4541e9c
+        image: ghcr.io/denuafhaengige/duah-admin:sha-4541e9c # {"$imagepolicy": "duah-apps:duah-admin-image-policy"}
         imagePullPolicy: IfNotPresent
         env:
         - name: DUAH_LISTENING_PORT
