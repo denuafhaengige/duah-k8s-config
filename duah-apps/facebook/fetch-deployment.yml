@@ -1,0 +1,80 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: duah-facebook-fetch-dep
+  namespace: duah-apps
+  labels:
+    app: duah-facebook-fetch
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: duah-facebook-fetch
+  template:
+    metadata:
+      labels:
+        app: duah-facebook-fetch
+    spec:
+      containers:
+      - name: duah-facebook
+        image: ghcr.io/denuafhaengige/duah-facebook:sha-2f62972
+        args:
+        - "--mode"
+        - "fetch"
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: DUAH_REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: redis-host
+        - name: DUAH_FACEBOOK_PAGE_ID
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: facebook-page-id
+        - name: DUAH_FACEBOOK_ACCESS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: duah-shared-secret
+              key: facebook-access-token
+        - name: DUAH_REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: duah-shared-secret
+              key: redis-password
+        - name: DUAH_APP_INSIGHTS_I_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: application-insights-instrumentation-key
+        ports:
+        - name: health
+          containerPort: 9090
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 64m
+            memory: 128Mi
+          requests:
+            cpu: 32m
+            memory: 64Mi
+        livenessProbe:
+          httpGet:
+            path: /healthz/live
+            port: health
+          failureThreshold: 3
+          periodSeconds: 10
+          initialDelaySeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /healthz/ready
+            port: health
+          failureThreshold: 3
+          periodSeconds: 10
+          initialDelaySeconds: 30
