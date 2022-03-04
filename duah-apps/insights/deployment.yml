@@ -1,0 +1,97 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: duah-insights-dep
+  namespace: duah-apps
+  labels:
+    app: duah-insights
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: duah-insights
+  template:
+    metadata:
+      labels:
+        app: duah-insights
+    spec:
+      containers:
+      - name: duah-insights
+        image: ghcr.io/denuafhaengige/duah-insights:sha-2f62972
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: DUAH_FORCE_DATABASE_SCHEMA_SYNC
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: force-database-schema-sync
+        - name: DUAH_DATABASE_URI
+          valueFrom:
+            secretKeyRef:
+              name: duah-shared-secret
+              key: database-uri
+        - name: DUAH_REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: redis-host
+        - name: DUAH_REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: duah-shared-secret
+              key: redis-password
+        - name: DUAH_FILE_STORAGE_PATH
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: file-storage-path
+        - name: DUAH_TEMP_STORAGE_PATH
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: temp-storage-path
+        - name: DUAH_APP_INSIGHTS_I_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: application-insights-instrumentation-key
+        volumeMounts:
+        - name: duah-shared-storage
+          mountPath: /mnt/shared-storage
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        - name: health
+          containerPort: 9090
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 64m
+            memory: 128Mi
+          requests:
+            cpu: 32m
+            memory: 64Mi
+        livenessProbe:
+          httpGet:
+            path: /healthz/live
+            port: health
+          failureThreshold: 3
+          periodSeconds: 10
+          initialDelaySeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /healthz/ready
+            port: health
+          failureThreshold: 3
+          periodSeconds: 10
+          initialDelaySeconds: 30
+      volumes:
+      - name: duah-shared-storage
+        persistentVolumeClaim:
+          claimName: duah-shared-storage-pvc

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: duah-identity-svc
+  namespace: duah-apps
+  labels:
+    app: duah-identity
+spec:
+  type: ClusterIP
+  selector:
+    app: duah-identity
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP

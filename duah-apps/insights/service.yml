@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: duah-insights-svc
+  namespace: duah-apps
+  labels:
+    app: duah-insights
+spec:
+  type: ClusterIP
+  selector:
+    app: duah-insights
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
