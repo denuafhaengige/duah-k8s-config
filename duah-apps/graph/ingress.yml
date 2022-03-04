@@ -1,0 +1,47 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: duah-graph-ingress
+  namespace: duah-apps
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-http-prod
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-body-size: 10240m
+spec:
+  rules:
+  - host: graph.denuafhaengige.dk
+    http:
+      paths:
+      - path: /
+        pathType: Prefix 
+        backend:
+          service:
+            name: duah-graph-svc
+            port:
+              number: 80
+  tls:
+  - secretName: duah-graph-tls-cert
+    hosts:
+    - graph.denuafhaengige.dk
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: duah-graph-redirect-ingress
+  namespace: duah-apps
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-http-prod
+    nginx.ingress.kubernetes.io/permanent-redirect: https://graph.denuafhaengige.dk$request_uri
+spec:
+  rules:
+  - host: graph.xn--denuafhngige-ddb.dk
+  - host: graph.denuafhangige.dk
+  - host: graph.duah.dk
+  tls:
+  - secretName: duah-graph-redirect-tls-cert
+    hosts:
+    - graph.xn--denuafhngige-ddb.dk
+    - graph.denuafhangige.dk
+    - graph.duah.dk

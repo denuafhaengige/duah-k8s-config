@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: duah-graph-svc
+  namespace: duah-apps
+  labels:
+    app: duah-graph
+spec:
+  type: ClusterIP
+  selector:
+    app: duah-graph
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
