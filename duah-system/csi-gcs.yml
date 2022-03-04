@@ -52,3 +52,4 @@ parameters:
   csi.storage.k8s.io/controller-expand-secret-name: csi-gcs-duah-secret
   csi.storage.k8s.io/controller-expand-secret-namespace: duah-system
   gcs.csi.ofek.dev/project-id: denuafhaengige
+reclaimPolicy: Retain
