@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -22,7 +21,7 @@ spec:
     spec:
       containers:
       - name: duah-identity
-        image: ghcr.io/denuafhaengige/duah-identity:sha-2f62972 # {"$imagepolicy": "duah-apps:duah-identity-image-policy"}
+        image: ghcr.io/denuafhaengige/duah-identity:master-32f3156-1646429587 # {"$imagepolicy": "duah-apps:duah-identity-image-policy"}
         imagePullPolicy: IfNotPresent
         env:
         - name: DUAH_LISTENING_PORT

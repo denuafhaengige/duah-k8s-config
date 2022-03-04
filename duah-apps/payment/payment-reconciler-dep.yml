@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -22,7 +21,7 @@ spec:
     spec:
       containers:
       - name: duah-payment
-        image: ghcr.io/denuafhaengige/duah-payment:sha-d3895d1 # {"$imagepolicy": "duah-apps:duah-payment-image-policy"}
+        image: ghcr.io/denuafhaengige/duah-payment:master-bcf5884-1646430703 # {"$imagepolicy": "duah-apps:duah-payment-image-policy"}
         args:
         - "--mode"
         - "reconciler"
