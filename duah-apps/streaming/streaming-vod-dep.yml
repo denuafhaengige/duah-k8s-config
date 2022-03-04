@@ -2,31 +2,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: duah-stream-front-dep
+  name: duah-vod-dep
   namespace: duah-apps
   labels:
-    app: duah-stream-front
+    app: duah-vod
 spec:
-  replicas: 2
+  replicas: 1
   strategy:
     rollingUpdate:
       maxUnavailable: 0
     type: RollingUpdate
   selector:
     matchLabels:
-      app: duah-stream-front
+      app: duah-vod
   template:
     metadata:
       labels:
-        app: duah-stream-front
+        app: duah-vod
     spec:
       containers:
-      - name: duah-live-front
-        image: ghcr.io/denuafhaengige/duah-streaming:sha-22a6595
+      - name: duah-vod
+        image: ghcr.io/denuafhaengige/duah-streaming:sha-22a6595 # {"$imagepolicy": "duah-apps:duah-streaming-image-policy"}
         imagePullPolicy: IfNotPresent
         args:
         - --mode
-        - stream-front
+        - vod
         env:
         - name: DUAH_FILE_STORAGE_PATH
           valueFrom:
@@ -73,26 +73,18 @@ spec:
             configMapKeyRef:
               name: duah-shared-conf
               key: streaming-nginx-tail-log-files
+        - name: DUAH_STREAMING_NGINX_LOG_LEVEL
+          value: "info"
         - name: DUAH_STREAMING_NGINX_MIME_TYPES_PATH
           valueFrom:
             configMapKeyRef:
               name: duah-shared-conf
               key: streaming-nginx-mime-types-path
-        - name: DUAH_STREAMING_RTMP_INPUT_HOST
+        - name: DUAH_STREAMING_VOD_BASE_URL
           valueFrom:
             configMapKeyRef:
               name: duah-shared-conf
-              key: streaming-rtmp-input-host
-        - name: DUAH_STREAMING_VOD_HOST
-          valueFrom:
-            configMapKeyRef:
-              name: duah-shared-conf
-              key: streaming-vod-host
-        - name: DUAH_STREAMING_NGINX_LOG_LEVEL
-          valueFrom:
-            configMapKeyRef:
-              name: duah-shared-conf
-              key: streaming-nginx-log-level
+              key: streaming-vod-base-url
         volumeMounts:
         - name: duah-shared-storage
           mountPath: /mnt/shared-storage
@@ -105,10 +97,10 @@ spec:
           protocol: TCP
         resources:
           limits:
-            cpu: 64m
-            memory: 256Mi
+            cpu: 1024m
+            memory: 512Mi
           requests:
-            cpu: 32m
+            cpu: 256m
             memory: 128Mi
         livenessProbe:
           httpGet:

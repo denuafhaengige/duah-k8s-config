@@ -2,49 +2,52 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: duah-email-dep
+  name: duah-facebook-fetch-dep
   namespace: duah-apps
   labels:
-    app: duah-email
+    app: duah-facebook-fetch
 spec:
-  replicas: 0
+  replicas: 1
   strategy:
     rollingUpdate:
       maxUnavailable: 0
     type: RollingUpdate
   selector:
     matchLabels:
-      app: duah-email
+      app: duah-facebook-fetch
   template:
     metadata:
       labels:
-        app: duah-email
+        app: duah-facebook-fetch
     spec:
       containers:
-      - name: duah-email
-        image: ghcr.io/denuafhaengige/duah-email:sha-2f62972
+      - name: duah-facebook
+        image: ghcr.io/denuafhaengige/duah-facebook:sha-2f62972 # {"$imagepolicy": "duah-apps:duah-facebook-image-policy"}
+        args:
+        - "--mode"
+        - "fetch"
         imagePullPolicy: IfNotPresent
         env:
-        - name: DUAH_FORCE_DATABASE_SCHEMA_SYNC
+        - name: DUAH_REDIS_HOST
           valueFrom:
             configMapKeyRef:
               name: duah-shared-conf
-              key: force-database-schema-sync
-        - name: DUAH_MAILCHIMP_AUDIENCE_ID
+              key: redis-host
+        - name: DUAH_FACEBOOK_PAGE_ID
           valueFrom:
             configMapKeyRef:
               name: duah-shared-conf
-              key: mailchimp-audience-id
-        - name: DUAH_MAILCHIMP_API_KEY
+              key: facebook-page-id
+        - name: DUAH_FACEBOOK_ACCESS_TOKEN
           valueFrom:
             secretKeyRef:
               name: duah-shared-secret
-              key: mailchimp-api-key
-        - name: DUAH_DATABASE_URI
+              key: facebook-access-token
+        - name: DUAH_REDIS_PASSWORD
           valueFrom:
             secretKeyRef:
               name: duah-shared-secret
-              key: database-uri
+              key: redis-password
         - name: DUAH_APP_INSIGHTS_I_KEY
           valueFrom:
             configMapKeyRef:
@@ -56,11 +59,11 @@ spec:
           protocol: TCP
         resources:
           limits:
-            cpu: 128m
-            memory: 512Mi
-          requests:
             cpu: 64m
             memory: 128Mi
+          requests:
+            cpu: 32m
+            memory: 64Mi
         livenessProbe:
           httpGet:
             path: /healthz/live

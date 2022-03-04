@@ -2,73 +2,65 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: duah-identity-dep
+  name: duah-email-dep
   namespace: duah-apps
   labels:
-    app: duah-identity
+    app: duah-email
 spec:
-  replicas: 2
+  replicas: 0
   strategy:
     rollingUpdate:
       maxUnavailable: 0
     type: RollingUpdate
   selector:
     matchLabels:
-      app: duah-identity
+      app: duah-email
   template:
     metadata:
       labels:
-        app: duah-identity
+        app: duah-email
     spec:
       containers:
-      - name: duah-identity
-        image: ghcr.io/denuafhaengige/duah-identity:sha-2f62972
+      - name: duah-email
+        image: ghcr.io/denuafhaengige/duah-email:sha-2f62972 # {"$imagepolicy": "duah-apps:duah-email-image-policy"}
         imagePullPolicy: IfNotPresent
         env:
-        - name: DUAH_LISTENING_PORT
+        - name: DUAH_FORCE_DATABASE_SCHEMA_SYNC
           valueFrom:
             configMapKeyRef:
               name: duah-shared-conf
-              key: http-listening-port
-        - name: DUAH_HTTP_LISTENING_PORT
+              key: force-database-schema-sync
+        - name: DUAH_MAILCHIMP_AUDIENCE_ID
           valueFrom:
             configMapKeyRef:
               name: duah-shared-conf
-              key: http-listening-port
-        - name: DUAH_AAD_TENANT
-          valueFrom:
-            configMapKeyRef:
-              name: duah-shared-conf
-              key: aad-tenant
-        - name: DUAH_AAD_APPLICATION_CLIENT_ID
-          valueFrom:
-            configMapKeyRef:
-              name: duah-shared-conf
-              key: aad-application-client-id
-        - name: DUAH_AAD_APPLICATION_CLIENT_SECRET
+              key: mailchimp-audience-id
+        - name: DUAH_MAILCHIMP_API_KEY
           valueFrom:
             secretKeyRef:
               name: duah-shared-secret
-              key: aad-application-client-secret
+              key: mailchimp-api-key
+        - name: DUAH_DATABASE_URI
+          valueFrom:
+            secretKeyRef:
+              name: duah-shared-secret
+              key: database-uri
         - name: DUAH_APP_INSIGHTS_I_KEY
           valueFrom:
             configMapKeyRef:
               name: duah-shared-conf
               key: application-insights-instrumentation-key
         ports:
-        - name: http
-          containerPort: 80
-          protocol: TCP
         - name: health
           containerPort: 9090
           protocol: TCP
         resources:
           limits:
-            cpu: 32m
-            memory: 64Mi
+            cpu: 128m
+            memory: 512Mi
           requests:
-            cpu: 16m
-            memory: 32Mi
+            cpu: 64m
+            memory: 128Mi
         livenessProbe:
           httpGet:
             path: /healthz/live

@@ -1,0 +1,26 @@
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImageRepository
+metadata:
+  name: duah-payment-image-repo
+  namespace: duah-apps
+spec:
+  interval: 5m
+  image: ghcr.io/denuafhaengige/duah-payment
+  secretRef:
+    name: duah-ghcr-pull-secret
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImagePolicy
+metadata:
+  name: duah-payment-image-policy
+  namespace: duah-apps
+spec:
+  imageRepositoryRef:
+    name: duah-payment-image-repo
+  filterTags:
+    pattern: '^master-[a-f0-9]+-(?P<ts>[0-9]+)'
+    extract: '$ts'
+  policy:
+    numerical:
+      order: asc

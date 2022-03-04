@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: duah-insights
-        image: ghcr.io/denuafhaengige/duah-insights:sha-2f62972
+        image: ghcr.io/denuafhaengige/duah-insights:sha-2f62972 # {"$imagepolicy": "duah-apps:duah-insights-image-policy"}
         imagePullPolicy: IfNotPresent
         env:
         - name: DUAH_FORCE_DATABASE_SCHEMA_SYNC

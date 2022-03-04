@@ -2,10 +2,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: duah-website-dep
+  name: duah-identity-dep
   namespace: duah-apps
   labels:
-    app: duah-website
+    app: duah-identity
 spec:
   replicas: 2
   strategy:
@@ -14,15 +14,15 @@ spec:
     type: RollingUpdate
   selector:
     matchLabels:
-      app: duah-website
+      app: duah-identity
   template:
     metadata:
       labels:
-        app: duah-website
+        app: duah-identity
     spec:
       containers:
-      - name: duah-website
-        image: ghcr.io/denuafhaengige/duah-website:sha-72cc7f0
+      - name: duah-identity
+        image: ghcr.io/denuafhaengige/duah-identity:sha-2f62972 # {"$imagepolicy": "duah-apps:duah-identity-image-policy"}
         imagePullPolicy: IfNotPresent
         env:
         - name: DUAH_LISTENING_PORT
@@ -35,31 +35,21 @@ spec:
             configMapKeyRef:
               name: duah-shared-conf
               key: http-listening-port
-        - name: DUAH_GRAPH_ENDPOINT
+        - name: DUAH_AAD_TENANT
           valueFrom:
             configMapKeyRef:
               name: duah-shared-conf
-              key: graph-endpoint
-        - name: DUAH_PAYMENT_ENDPOINT
+              key: aad-tenant
+        - name: DUAH_AAD_APPLICATION_CLIENT_ID
           valueFrom:
             configMapKeyRef:
               name: duah-shared-conf
-              key: payment-endpoint
-        - name: DUAH_FACEBOOK_ENDPOINT
+              key: aad-application-client-id
+        - name: DUAH_AAD_APPLICATION_CLIENT_SECRET
           valueFrom:
-            configMapKeyRef:
-              name: duah-shared-conf
-              key: facebook-endpoint
-        - name: DUAH_RADIO_ENDPOINT
-          valueFrom:
-            configMapKeyRef:
-              name: duah-shared-conf
-              key: radio-endpoint
-        - name: DUAH_RADIO_OVERRIDE_ENDPOINT
-          valueFrom:
-            configMapKeyRef:
-              name: duah-shared-conf
-              key: radio-endpoint-override
+            secretKeyRef:
+              name: duah-shared-secret
+              key: aad-application-client-secret
         - name: DUAH_APP_INSIGHTS_I_KEY
           valueFrom:
             configMapKeyRef:
@@ -74,11 +64,11 @@ spec:
           protocol: TCP
         resources:
           limits:
-            cpu: 128m
-            memory: 128Mi
-          requests:
-            cpu: 64m
+            cpu: 32m
             memory: 64Mi
+          requests:
+            cpu: 16m
+            memory: 32Mi
         livenessProbe:
           httpGet:
             path: /healthz/live

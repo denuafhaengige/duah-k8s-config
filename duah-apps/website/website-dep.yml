@@ -2,27 +2,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: duah-graph-dep
+  name: duah-website-dep
   namespace: duah-apps
   labels:
-    app: duah-graph
+    app: duah-website
 spec:
-  replicas: 4
+  replicas: 2
   strategy:
     rollingUpdate:
       maxUnavailable: 0
     type: RollingUpdate
   selector:
     matchLabels:
-      app: duah-graph
+      app: duah-website
   template:
     metadata:
       labels:
-        app: duah-graph
+        app: duah-website
     spec:
       containers:
-      - name: duah-graph
-        image: ghcr.io/denuafhaengige/duah-graph:sha-029a447
+      - name: duah-website
+        image: ghcr.io/denuafhaengige/duah-website:sha-72cc7f0 # {"$imagepolicy": "duah-apps:duah-website-image-policy"}
         imagePullPolicy: IfNotPresent
         env:
         - name: DUAH_LISTENING_PORT
@@ -40,54 +40,31 @@ spec:
             configMapKeyRef:
               name: duah-shared-conf
               key: graph-endpoint
-        - name: DUAH_IDENTITY_ENDPOINT
+        - name: DUAH_PAYMENT_ENDPOINT
           valueFrom:
             configMapKeyRef:
               name: duah-shared-conf
-              key: identity-endpoint
-        - name: DUAH_FORCE_DATABASE_SCHEMA_SYNC
+              key: payment-endpoint
+        - name: DUAH_FACEBOOK_ENDPOINT
           valueFrom:
             configMapKeyRef:
               name: duah-shared-conf
-              key: force-database-schema-sync
-        - name: DUAH_FILE_STORAGE_PATH
+              key: facebook-endpoint
+        - name: DUAH_RADIO_ENDPOINT
           valueFrom:
             configMapKeyRef:
               name: duah-shared-conf
-              key: file-storage-path
-        - name: DUAH_FILE_STORAGE_URL_PATH
+              key: radio-endpoint
+        - name: DUAH_RADIO_OVERRIDE_ENDPOINT
           valueFrom:
             configMapKeyRef:
               name: duah-shared-conf
-              key: file-storage-url-path
-        - name: DUAH_REDIS_HOST
-          valueFrom:
-            configMapKeyRef:
-              name: duah-shared-conf
-              key: redis-host
-        - name: DUAH_DATABASE_URI
-          valueFrom:
-            secretKeyRef:
-              name: duah-shared-secret
-              key: database-uri
-        - name: DUAH_REDIS_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: duah-shared-secret
-              key: redis-password
+              key: radio-endpoint-override
         - name: DUAH_APP_INSIGHTS_I_KEY
           valueFrom:
             configMapKeyRef:
               name: duah-shared-conf
               key: application-insights-instrumentation-key
-        - name: DUAH_SHARED_ENCRYPTION_KEY
-          valueFrom:
-            secretKeyRef:
-              name: duah-shared-secret
-              key: shared-encryption-key
-        volumeMounts:
-        - name: duah-shared-storage
-          mountPath: /mnt/shared-storage
         ports:
         - name: http
           containerPort: 80
@@ -97,11 +74,11 @@ spec:
           protocol: TCP
         resources:
           limits:
-            cpu: 1024m
-            memory: 2048Mi
-          requests:
             cpu: 128m
-            memory: 256Mi
+            memory: 128Mi
+          requests:
+            cpu: 64m
+            memory: 64Mi
         livenessProbe:
           httpGet:
             path: /healthz/live
@@ -116,7 +93,3 @@ spec:
           failureThreshold: 3
           periodSeconds: 10
           initialDelaySeconds: 30
-      volumes:
-      - name: duah-shared-storage
-        persistentVolumeClaim:
-          claimName: duah-shared-storage-pvc

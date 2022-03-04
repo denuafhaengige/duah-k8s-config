@@ -2,37 +2,57 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: duah-payment-reconciler-dep
+  name: duah-payment-api-dep
   namespace: duah-apps
   labels:
-    app: duah-payment-reconciler
+    app: duah-payment-api
 spec:
-  replicas: 0
+  replicas: 2
   strategy:
     rollingUpdate:
       maxUnavailable: 0
     type: RollingUpdate
   selector:
     matchLabels:
-      app: duah-payment-reconciler
+      app: duah-payment-api
   template:
     metadata:
       labels:
-        app: duah-payment-reconciler
+        app: duah-payment-api
     spec:
       containers:
       - name: duah-payment
-        image: ghcr.io/denuafhaengige/duah-payment:sha-d3895d1
+        image: ghcr.io/denuafhaengige/duah-payment:sha-d3895d1 # {"$imagepolicy": "duah-apps:duah-payment-image-policy"}
         args:
         - "--mode"
-        - "reconciler"
+        - "api"
         imagePullPolicy: IfNotPresent
         env:
+        - name: DUAH_LISTENING_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: http-listening-port
+        - name: DUAH_HTTP_LISTENING_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: http-listening-port
+        - name: DUAH_PAYMENT_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: payment-endpoint
         - name: DUAH_FORCE_DATABASE_SCHEMA_SYNC
           valueFrom:
             configMapKeyRef:
               name: duah-shared-conf
               key: force-database-schema-sync
+        - name: DUAH_MOBILEPAY_REDIRECT_URI
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: mobilepay-redirect-uri
         - name: DUAH_MOBILEPAY_API_ENDPOINT
           valueFrom:
             configMapKeyRef:
@@ -93,7 +113,7 @@ spec:
         resources:
           limits:
             cpu: 32m
-            memory: 128Mi
+            memory: 64Mi
           requests:
             cpu: 16m
             memory: 32Mi

@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: duah-members
-        image: ghcr.io/denuafhaengige/duah-members:sha-2f62972
+        image: ghcr.io/denuafhaengige/duah-members:sha-2f62972 # {"$imagepolicy": "duah-apps:duah-members-image-policy"}
         imagePullPolicy: IfNotPresent
         env:
         - name: DUAH_FORCE_DATABASE_SCHEMA_SYNC

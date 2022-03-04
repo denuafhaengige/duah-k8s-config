@@ -2,10 +2,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: duah-vod-dep
+  name: duah-rtmp-input-dep
   namespace: duah-apps
   labels:
-    app: duah-vod
+    app: duah-rtmp-input
 spec:
   replicas: 1
   strategy:
@@ -14,25 +14,40 @@ spec:
     type: RollingUpdate
   selector:
     matchLabels:
-      app: duah-vod
+      app: duah-rtmp-input
   template:
     metadata:
       labels:
-        app: duah-vod
+        app: duah-rtmp-input
     spec:
       containers:
-      - name: duah-vod
-        image: ghcr.io/denuafhaengige/duah-streaming:sha-22a6595
+      - name: duah-rtmp-input
+        image: ghcr.io/denuafhaengige/duah-streaming:sha-22a6595 # {"$imagepolicy": "duah-apps:duah-streaming-image-policy"}
         imagePullPolicy: IfNotPresent
         args:
         - --mode
-        - vod
+        - rtmp-input
         env:
+        - name: DUAH_STREAMING_SEGMENT_RECORDINGS_FOLDER_PATH
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: streaming-segment-recordings-file-path
+        - name: DUAH_STREAMING_SINGLE_FILE_RECORDING_FOLDER_PATH
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: streaming-single-file-recordings-file-path
         - name: DUAH_FILE_STORAGE_PATH
           valueFrom:
             configMapKeyRef:
               name: duah-shared-conf
               key: file-storage-path
+        - name: DUAH_TEMP_STORAGE_PATH
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: temp-storage-path
         - name: DUAH_REDIS_HOST
           valueFrom:
             configMapKeyRef:
@@ -53,11 +68,6 @@ spec:
             configMapKeyRef:
               name: duah-shared-conf
               key: application-insights-instrumentation-key
-        - name: DUAH_TEMP_STORAGE_PATH
-          valueFrom:
-            configMapKeyRef:
-              name: duah-shared-conf
-              key: temp-storage-path
         - name: DUAH_STREAMING_NGINX_ACCESS_LOG_PATH
           valueFrom:
             configMapKeyRef:
@@ -74,17 +84,25 @@ spec:
               name: duah-shared-conf
               key: streaming-nginx-tail-log-files
         - name: DUAH_STREAMING_NGINX_LOG_LEVEL
-          value: "info"
-        - name: DUAH_STREAMING_NGINX_MIME_TYPES_PATH
           valueFrom:
             configMapKeyRef:
               name: duah-shared-conf
-              key: streaming-nginx-mime-types-path
-        - name: DUAH_STREAMING_VOD_BASE_URL
+              key: streaming-nginx-log-level
+        - name: DUAH_STREAMING_ICECAST_SOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: duah-shared-secret
+              key: streaming-icecast-source-password
+        - name: DUAH_STREAMING_ICECAST_MASTER_HOSTNAME
           valueFrom:
             configMapKeyRef:
               name: duah-shared-conf
-              key: streaming-vod-base-url
+              key: streaming-icecast-master-hostname
+        - name: DUAH_SHARED_ENCRYPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: duah-shared-secret
+              key: shared-encryption-key
         volumeMounts:
         - name: duah-shared-storage
           mountPath: /mnt/shared-storage
@@ -92,16 +110,19 @@ spec:
         - name: http
           containerPort: 80
           protocol: TCP
+        - name: rtmp
+          containerPort: 1935
+          protocol: TCP
         - name: health
           containerPort: 9090
           protocol: TCP
         resources:
           limits:
-            cpu: 1024m
-            memory: 512Mi
+            cpu: 8048m
+            memory: 2048Mi
           requests:
-            cpu: 256m
-            memory: 128Mi
+            cpu: 2024m
+            memory: 1024Mi
         livenessProbe:
           httpGet:
             path: /healthz/live
