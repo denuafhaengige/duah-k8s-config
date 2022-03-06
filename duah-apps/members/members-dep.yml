@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -22,7 +21,7 @@ spec:
     spec:
       containers:
       - name: duah-members
-        image: ghcr.io/denuafhaengige/duah-members:sha-2f62972 # {"$imagepolicy": "duah-apps:duah-members-image-policy"}
+        image: ghcr.io/denuafhaengige/duah-members:master-bcf5884-1646430704 # {"$imagepolicy": "duah-apps:duah-members-image-policy"}
         imagePullPolicy: IfNotPresent
         env:
         - name: DUAH_FORCE_DATABASE_SCHEMA_SYNC
