@@ -1,0 +1,17 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: infra
+  namespace: duah-system
+spec:
+  dependsOn:
+  - name: core-infra
+  interval: 10m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infra
+  prune: true
+  wait: true
+  timeout: 5m

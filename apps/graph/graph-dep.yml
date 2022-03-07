@@ -1,0 +1,118 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: duah-graph-dep
+  namespace: duah-apps
+  labels:
+    app: duah-graph
+spec:
+  replicas: 4
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: duah-graph
+  template:
+    metadata:
+      labels:
+        app: duah-graph
+    spec:
+      imagePullSecrets:
+      - name: duah-ghcr-pull-secret
+      containers:
+      - name: duah-graph
+        image: ghcr.io/denuafhaengige/duah-graph:master-32f3156-1646429583 # {"$imagepolicy": "duah-apps:duah-graph-image-policy"}
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: DUAH_LISTENING_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: http-listening-port
+        - name: DUAH_HTTP_LISTENING_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: http-listening-port
+        - name: DUAH_GRAPH_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: graph-endpoint
+        - name: DUAH_IDENTITY_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: identity-endpoint
+        - name: DUAH_FORCE_DATABASE_SCHEMA_SYNC
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: force-database-schema-sync
+        - name: DUAH_FILE_STORAGE_PATH
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: file-storage-path
+        - name: DUAH_FILE_STORAGE_URL_PATH
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: file-storage-url-path
+        - name: DUAH_REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: redis-host
+        - name: DUAH_DATABASE_URI
+          valueFrom:
+            secretKeyRef:
+              name: duah-shared-secret
+              key: database-uri
+        - name: DUAH_APP_INSIGHTS_I_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: application-insights-instrumentation-key
+        - name: DUAH_SHARED_ENCRYPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: duah-shared-secret
+              key: shared-encryption-key
+        volumeMounts:
+        - name: duah-shared-storage
+          mountPath: /mnt/shared-storage
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        - name: health
+          containerPort: 9090
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 1024m
+            memory: 2048Mi
+          requests:
+            cpu: 128m
+            memory: 256Mi
+        livenessProbe:
+          httpGet:
+            path: /healthz/live
+            port: health
+          failureThreshold: 3
+          periodSeconds: 10
+          initialDelaySeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /healthz/ready
+            port: health
+          failureThreshold: 3
+          periodSeconds: 10
+          initialDelaySeconds: 30
+      volumes:
+      - name: duah-shared-storage
+        persistentVolumeClaim:
+          claimName: duah-shared-storage-pvc

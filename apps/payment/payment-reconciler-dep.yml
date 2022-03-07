@@ -1,0 +1,114 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: duah-payment-reconciler-dep
+  namespace: duah-apps
+  labels:
+    app: duah-payment-reconciler
+spec:
+  replicas: 0
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: duah-payment-reconciler
+  template:
+    metadata:
+      labels:
+        app: duah-payment-reconciler
+    spec:
+      imagePullSecrets:
+      - name: duah-ghcr-pull-secret
+      containers:
+      - name: duah-payment
+        image: ghcr.io/denuafhaengige/duah-payment:master-bcf5884-1646430703 # {"$imagepolicy": "duah-apps:duah-payment-image-policy"}
+        args:
+        - "--mode"
+        - "reconciler"
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: DUAH_FORCE_DATABASE_SCHEMA_SYNC
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: force-database-schema-sync
+        - name: DUAH_MOBILEPAY_API_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: mobilepay-api-endpoint
+        - name: DUAH_MOBILEPAY_DISCOVER_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: mobilepay-discover-endpoint
+        - name: DUAH_MOBILEPAY_MERCHANT_CLIENT_ID
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: mobilepay-merchant-client-id
+        - name: DUAH_MOBILEPAY_MERCHANT_PROVIDER_ID
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: mobilepay-merchant-provider-id
+        - name: DUAH_MOBILEPAY_APPLICATION_CLIENT_ID
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: mobilepay-application-client-id
+        - name: DUAH_DATABASE_URI
+          valueFrom:
+            secretKeyRef:
+              name: duah-shared-secret
+              key: database-uri
+        - name: DUAH_MOBILEPAY_MERCHANT_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: duah-shared-secret
+              key: mobilepay-merchant-client-secret
+        - name: DUAH_MOBILEPAY_MERCHANT_REFRESH_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: duah-shared-secret
+              key: mobilepay-merchant-refresh-token
+        - name: DUAH_MOBILEPAY_APPLICATION_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: duah-shared-secret
+              key: mobilepay-application-client-secret
+        - name: DUAH_APP_INSIGHTS_I_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: application-insights-instrumentation-key
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        - name: health
+          containerPort: 9090
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 32m
+            memory: 128Mi
+          requests:
+            cpu: 16m
+            memory: 32Mi
+        livenessProbe:
+          httpGet:
+            path: /healthz/live
+            port: health
+          failureThreshold: 3
+          periodSeconds: 10
+          initialDelaySeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /healthz/ready
+            port: health
+          failureThreshold: 3
+          periodSeconds: 10
+          initialDelaySeconds: 30

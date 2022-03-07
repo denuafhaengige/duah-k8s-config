@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: duah-identity-dep
+  namespace: duah-apps
+  labels:
+    app: duah-identity
+spec:
+  replicas: 2
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: duah-identity
+  template:
+    metadata:
+      labels:
+        app: duah-identity
+    spec:
+      imagePullSecrets:
+      - name: duah-ghcr-pull-secret
+      containers:
+      - name: duah-identity
+        image: ghcr.io/denuafhaengige/duah-identity:master-32f3156-1646429587 # {"$imagepolicy": "duah-apps:duah-identity-image-policy"}
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: DUAH_LISTENING_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: http-listening-port
+        - name: DUAH_HTTP_LISTENING_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: http-listening-port
+        - name: DUAH_AAD_TENANT
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: aad-tenant
+        - name: DUAH_AAD_APPLICATION_CLIENT_ID
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: aad-application-client-id
+        - name: DUAH_AAD_APPLICATION_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: duah-shared-secret
+              key: aad-application-client-secret
+        - name: DUAH_APP_INSIGHTS_I_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: application-insights-instrumentation-key
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        - name: health
+          containerPort: 9090
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 32m
+            memory: 64Mi
+          requests:
+            cpu: 16m
+            memory: 32Mi
+        livenessProbe:
+          httpGet:
+            path: /healthz/live
+            port: health
+          failureThreshold: 3
+          periodSeconds: 10
+          initialDelaySeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /healthz/ready
+            port: health
+          failureThreshold: 3
+          periodSeconds: 10
+          initialDelaySeconds: 30

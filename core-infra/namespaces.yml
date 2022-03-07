@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    name: duah-system
+  name: duah-system
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    name: duah-apps
+  name: duah-apps

@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: duah-website-dep
+  namespace: duah-apps
+  labels:
+    app: duah-website
+spec:
+  replicas: 2
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: duah-website
+  template:
+    metadata:
+      labels:
+        app: duah-website
+    spec:
+      imagePullSecrets:
+      - name: duah-ghcr-pull-secret
+      containers:
+      - name: duah-website
+        image: ghcr.io/denuafhaengige/duah-website:master-bcf5884-1646430705 # {"$imagepolicy": "duah-apps:duah-website-image-policy"}
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: DUAH_LISTENING_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: http-listening-port
+        - name: DUAH_HTTP_LISTENING_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: http-listening-port
+        - name: DUAH_GRAPH_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: graph-endpoint
+        - name: DUAH_PAYMENT_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: payment-endpoint
+        - name: DUAH_FACEBOOK_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: facebook-endpoint
+        - name: DUAH_RADIO_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: radio-endpoint
+        - name: DUAH_RADIO_OVERRIDE_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: radio-endpoint-override
+        - name: DUAH_APP_INSIGHTS_I_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: application-insights-instrumentation-key
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        - name: health
+          containerPort: 9090
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 128m
+            memory: 128Mi
+          requests:
+            cpu: 64m
+            memory: 64Mi
+        livenessProbe:
+          httpGet:
+            path: /healthz/live
+            port: health
+          failureThreshold: 3
+          periodSeconds: 10
+          initialDelaySeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /healthz/ready
+            port: health
+          failureThreshold: 3
+          periodSeconds: 10
+          initialDelaySeconds: 30

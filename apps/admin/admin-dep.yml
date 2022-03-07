@@ -1,0 +1,106 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: duah-admin-dep
+  namespace: duah-apps
+  labels:
+    app: duah-admin
+spec:
+  replicas: 2
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: duah-admin
+  template:
+    metadata:
+      labels:
+        app: duah-admin
+    spec:
+      imagePullSecrets:
+      - name: duah-ghcr-pull-secret
+      containers:
+      - name: duah-admin
+        image: ghcr.io/denuafhaengige/duah-admin:master-bcf5884-1646430704 # {"$imagepolicy": "duah-apps:duah-admin-image-policy"}
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: DUAH_LISTENING_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: http-listening-port
+        - name: DUAH_HTTP_LISTENING_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: http-listening-port
+        - name: DUAH_APP_INSIGHTS_I_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: application-insights-instrumentation-key
+        - name: DUAH_AAD_TENANT
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: aad-tenant
+        - name: DUAH_AAD_APPLICATION_CLIENT_ID
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: aad-application-client-id
+        - name: DUAH_GRAPH_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: graph-endpoint
+        - name: DUAH_PAYMENT_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: payment-endpoint
+        - name: DUAH_FILE_STORAGE_URL_PATH
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: file-storage-url-path
+        - name: DUAH_AAD_REACT_APPLICATION_CLIENT_ID
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: aad-react-application-client-id
+        - name: DUAH_AAD_REACT_REDIRECT_URL
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: aad-react-redirect-url
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        - name: health
+          containerPort: 9090
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 32m
+            memory: 64Mi
+          requests:
+            cpu: 16m
+            memory: 32Mi
+        livenessProbe:
+          httpGet:
+            path: /healthz/live
+            port: health
+          failureThreshold: 3
+          periodSeconds: 10
+          initialDelaySeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /healthz/ready
+            port: health
+          failureThreshold: 3
+          periodSeconds: 10
+          initialDelaySeconds: 30

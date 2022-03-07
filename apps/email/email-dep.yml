@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: duah-email-dep
+  namespace: duah-apps
+  labels:
+    app: duah-email
+spec:
+  replicas: 0
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: duah-email
+  template:
+    metadata:
+      labels:
+        app: duah-email
+    spec:
+      imagePullSecrets:
+      - name: duah-ghcr-pull-secret
+      containers:
+      - name: duah-email
+        image: ghcr.io/denuafhaengige/duah-email:master-bcf5884-1646430704 # {"$imagepolicy": "duah-apps:duah-email-image-policy"}
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: DUAH_FORCE_DATABASE_SCHEMA_SYNC
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: force-database-schema-sync
+        - name: DUAH_MAILCHIMP_AUDIENCE_ID
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: mailchimp-audience-id
+        - name: DUAH_MAILCHIMP_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: duah-shared-secret
+              key: mailchimp-api-key
+        - name: DUAH_DATABASE_URI
+          valueFrom:
+            secretKeyRef:
+              name: duah-shared-secret
+              key: database-uri
+        - name: DUAH_APP_INSIGHTS_I_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: application-insights-instrumentation-key
+        ports:
+        - name: health
+          containerPort: 9090
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 128m
+            memory: 512Mi
+          requests:
+            cpu: 64m
+            memory: 128Mi
+        livenessProbe:
+          httpGet:
+            path: /healthz/live
+            port: health
+          failureThreshold: 3
+          periodSeconds: 10
+          initialDelaySeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /healthz/ready
+            port: health
+          failureThreshold: 3
+          periodSeconds: 10
+          initialDelaySeconds: 30
