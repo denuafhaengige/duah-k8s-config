@@ -12,8 +12,8 @@ resources:
   - ./payment/
   - ./streaming/
   - ./website/
-  - shared-conf.yml
-  - shared-secret.yml
-  - ghcr-pull-secret.yml
-  - gcs-shared-storage-pvc.yml
-  - image-update-automation.yml
+  - shared-conf.yaml
+  - shared-secret.yaml
+  - ghcr-pull-secret.yaml
+  - gcs-shared-storage-pvc.yaml
+  - image-update-automation.yaml

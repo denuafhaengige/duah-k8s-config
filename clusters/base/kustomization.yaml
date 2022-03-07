@@ -2,6 +2,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: duah-system
 resources:
-  - core-infra.yml
-  - infra.yml
-  - apps.yml
+  - core-infra.yaml
+  - infra.yaml
+  - apps.yaml
