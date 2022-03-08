@@ -23,7 +23,7 @@ metadata:
   namespace: duah-system
 spec:
   dependsOn:
-  -name: csi-gcs-installation
+  - name: csi-gcs-installation
   interval: 10m
   retryInterval: 10s
   sourceRef:
