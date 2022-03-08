@@ -36,3 +36,8 @@ spec:
   prune: true
   wait: true
   timeout: 30s
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: cluster-environment-config
+        namespace: flux-system

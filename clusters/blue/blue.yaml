@@ -14,20 +14,11 @@ spec:
   path: ./clusters/base
   prune: true
   timeout: 5m
-  patches:
-  - patch: |
-      - op: replace
-        path: /spec/loadBalancerIP
-        value: 34.88.169.119
-    target:
-      kind: Service
-      name: duah-rtmp-input-public-svc
-      namespace: duah-apps
-  - patch: |
-      - op: replace
-        path: /spec/values/controller/service/loadBalancerIP
-        value: 35.228.42.110
-    target:
-      kind: HelmRelease
-      name: nginx-ingress
-      namespace: duah-system
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-environment-config
+data:
+  ingress-public-ip: 35.228.42.110
+  rtmp-input-public-ip: 34.88.169.119

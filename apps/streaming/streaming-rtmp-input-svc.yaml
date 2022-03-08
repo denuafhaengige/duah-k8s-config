@@ -22,7 +22,7 @@ metadata:
   name: duah-rtmp-input-public-svc
   namespace: duah-apps
 spec:
-  loadBalancerIP: 34.88.189.185
+  loadBalancerIP: ${rtmp-input-public-ip}
   ports:
   - name: rtmp
     port: 1935
