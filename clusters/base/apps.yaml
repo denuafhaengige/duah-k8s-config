@@ -15,7 +15,6 @@ spec:
     namespace: flux-system
   path: ./apps-prereqs
   prune: true
-  wait: true
   timeout: 5m
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
@@ -34,5 +33,4 @@ spec:
     namespace: flux-system
   path: ./apps
   prune: true
-  wait: true
   timeout: 5m

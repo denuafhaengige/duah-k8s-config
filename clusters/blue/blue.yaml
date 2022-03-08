@@ -13,7 +13,6 @@ spec:
     namespace: flux-system
   path: ./clusters/base
   prune: true
-  wait: true
   timeout: 5m
   patches:
   - patch: |
