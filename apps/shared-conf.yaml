@@ -19,7 +19,7 @@ data:
   force-database-schema-sync: "false"
   file-storage-path: /mnt/shared-storage
   file-storage-url-path: /files
-  redis-host: redis-master
+  redis-host: redis-master.duah-system
   mobilepay-api-endpoint: https://api.mobilepay.dk
   mobilepay-discover-endpoint: https://admin.mobilepay.dk/account/.well-known/openid-configuration
   mobilepay-merchant-client-id: kontoretjuhl
