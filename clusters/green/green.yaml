@@ -14,3 +14,20 @@ spec:
   prune: true
   wait: true
   timeout: 5m
+  patches:
+  - patch: |
+      - op: replace
+        path: /spec/loadBalancerIP
+        value: 34.88.175.205
+    target:
+      kind: Service
+      name: duah-rtmp-input-public-svc
+      namespace: duah-apps
+  - patch: |
+      - op: replace
+        path: /spec/values/controller/service/loadBalancerIP
+        value: 34.88.199.82
+    target:
+      kind: HelmRelease
+      name: nginx-ingress
+      namespace: duah-system

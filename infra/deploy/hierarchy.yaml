@@ -22,7 +22,7 @@ metadata:
   namespace: duah-system
 spec:
   dependsOn:
-  - name: selead-secrets
+  - name: sealed-secrets
   interval: 10m
   sourceRef:
     kind: GitRepository
@@ -40,7 +40,7 @@ metadata:
   namespace: duah-system
 spec:
   dependsOn:
-  - name: selead-secrets
+  - name: sealed-secrets
   interval: 10m
   sourceRef:
     kind: GitRepository
