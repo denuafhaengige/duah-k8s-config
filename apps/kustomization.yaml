@@ -12,7 +12,4 @@ resources:
   - ./streaming/
   - ./website/
   - shared-conf.yaml
-  - shared-secret.yaml
-  - ghcr-pull-secret.yaml
-  - gcs-shared-storage-pvc.yaml
   - image-update-automation.yaml

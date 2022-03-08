@@ -1,11 +1,3 @@
-apiVersion: source.toolkit.fluxcd.io/v1beta1
-kind: HelmRepository
-metadata:
-  name: nginx-ingress
-  namespace: duah-system
-spec:
-  interval: 1h0m0s
-  url: https://kubernetes.github.io/ingress-nginx
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
@@ -35,4 +27,3 @@ spec:
         default: true
       service:
         loadBalancerIP: "34.88.10.160"
----

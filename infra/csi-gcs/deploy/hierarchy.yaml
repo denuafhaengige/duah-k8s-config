@@ -2,17 +2,15 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: apps-prereqs
+  name: csi-gcs-installation
   namespace: duah-system
 spec:
-  dependsOn:
-  - name: infrastructure
   interval: 10m
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  path: ./apps-prereqs
+  path: ./infra/csi-gcs/installation
   prune: true
   wait: true
   timeout: 5m
@@ -20,17 +18,16 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: apps
+  name: csi-gcs-storage-classes
   namespace: duah-system
 spec:
-  dependsOn:
-  - name: apps-prereqs
+  dependsOn: csi-gcs-installation
   interval: 10m
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  path: ./apps
+  path: ./infra/csi-gcs/storage-classes
   prune: true
   wait: true
   timeout: 5m

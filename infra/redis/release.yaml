@@ -1,11 +1,3 @@
-apiVersion: source.toolkit.fluxcd.io/v1beta1
-kind: HelmRepository
-metadata:
-  name: redis
-  namespace: duah-apps
-spec:
-  interval: 1h0m0s
-  url: https://charts.bitnami.com/bitnami
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
@@ -32,4 +24,3 @@ spec:
     auth:
       enabled: false
     architecture: standalone
----

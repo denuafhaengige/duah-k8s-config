@@ -1,0 +1,15 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: csi-gcs-duah-sc
+provisioner: gcs.csi.ofek.dev
+parameters:
+  csi.storage.k8s.io/node-publish-secret-name: csi-gcs-duah-secret
+  csi.storage.k8s.io/node-publish-secret-namespace: duah-system
+  csi.storage.k8s.io/provisioner-secret-name: csi-gcs-duah-secret
+  csi.storage.k8s.io/provisioner-secret-namespace: duah-system
+  csi.storage.k8s.io/controller-expand-secret-name: csi-gcs-duah-secret
+  csi.storage.k8s.io/controller-expand-secret-namespace: duah-system
+  gcs.csi.ofek.dev/project-id: denuafhaengige
+reclaimPolicy: Retain

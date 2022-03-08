@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - duah-dns-sa-key-secret.yaml
+  - letsencrypt-prod-secret.yaml
+  - release.yaml
+  - repository.yaml
+  - resolvers.yaml
