@@ -26,4 +26,4 @@ spec:
       ingressClassResource:
         default: true
       service:
-        loadBalancerIP: ${ingress-public-ip}
+        loadBalancerIP: ${ingress_public_ip}
