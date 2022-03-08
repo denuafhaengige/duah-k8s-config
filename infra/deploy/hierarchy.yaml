@@ -86,4 +86,4 @@ spec:
   path: ./infra/redis
   prune: true
   wait: true
-  timeout: 5m
+  timeout: 30s

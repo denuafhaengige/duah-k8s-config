@@ -33,4 +33,4 @@ spec:
   path: ./infra/cert-manager/issuers
   prune: true
   wait: true
-  timeout: 5m
+  timeout: 30s

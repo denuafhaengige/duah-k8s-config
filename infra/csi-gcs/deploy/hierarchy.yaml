@@ -25,7 +25,7 @@ spec:
   dependsOn:
   - name: csi-gcs-installation
   interval: 10m
-  retryInterval: 5m
+  retryInterval: 10s
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -33,4 +33,4 @@ spec:
   path: ./infra/csi-gcs/storage-classes
   prune: true
   wait: true
-  timeout: 5m
+  timeout: 30s
