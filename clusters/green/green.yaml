@@ -16,6 +16,13 @@ spec:
   timeout: 5m
 ---
 apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    name: duah-system
+  name: duah-system
+---
+apiVersion: v1
 kind: ConfigMap
 metadata:
   name: cluster-environment-config
