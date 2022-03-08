@@ -22,7 +22,6 @@ spec:
   interval: 10m0s
   path: ./clusters/green
   prune: true
-  wait: true
   sourceRef:
     kind: GitRepository
     name: flux-system

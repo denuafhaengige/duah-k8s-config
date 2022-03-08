@@ -23,7 +23,7 @@ spec:
       - name: duah-ghcr-pull-secret
       containers:
       - name: duah-insights
-        image: ghcr.io/denuafhaengige/duah-insights:master-32f3156-1646429586 # {"$imagepolicy": "duah-apps:duah-insights-image-policy"}
+        image: ghcr.io/denuafhaengige/duah-insights:master-968229f-1646649592 # {"$imagepolicy": "duah-apps:duah-insights-image-policy"}
         imagePullPolicy: IfNotPresent
         env:
         - name: DUAH_FORCE_DATABASE_SCHEMA_SYNC

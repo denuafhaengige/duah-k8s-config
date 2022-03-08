@@ -23,7 +23,7 @@ spec:
       - name: duah-ghcr-pull-secret
       containers:
       - name: duah-email
-        image: ghcr.io/denuafhaengige/duah-email:master-bcf5884-1646430704 # {"$imagepolicy": "duah-apps:duah-email-image-policy"}
+        image: ghcr.io/denuafhaengige/duah-email:master-968229f-1646649596 # {"$imagepolicy": "duah-apps:duah-email-image-policy"}
         imagePullPolicy: IfNotPresent
         env:
         - name: DUAH_FORCE_DATABASE_SCHEMA_SYNC
