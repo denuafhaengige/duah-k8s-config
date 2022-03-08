@@ -23,7 +23,7 @@ spec:
       - name: duah-ghcr-pull-secret
       containers:
       - name: duah-members
-        image: ghcr.io/denuafhaengige/duah-members:master-bcf5884-1646430704 # {"$imagepolicy": "duah-apps:duah-members-image-policy"}
+        image: ghcr.io/denuafhaengige/duah-members:master-968229f-1646649596 # {"$imagepolicy": "duah-apps:duah-members-image-policy"}
         imagePullPolicy: IfNotPresent
         env:
         - name: DUAH_FORCE_DATABASE_SCHEMA_SYNC
