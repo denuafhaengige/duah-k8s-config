@@ -21,7 +21,8 @@ metadata:
   name: cert-manager-issuers
   namespace: duah-system
 spec:
-  dependsOn: cert-manager-installation
+  dependsOn: 
+  - name: cert-manager-installation
   interval: 10m
   sourceRef:
     kind: GitRepository

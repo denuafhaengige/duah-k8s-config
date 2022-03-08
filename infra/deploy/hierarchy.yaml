@@ -21,7 +21,8 @@ metadata:
   name: cert-manager
   namespace: duah-system
 spec:
-  dependsOn: selead-secrets
+  dependsOn:
+  - name: selead-secrets
   interval: 10m
   sourceRef:
     kind: GitRepository
@@ -38,7 +39,8 @@ metadata:
   name: csi-gcs
   namespace: duah-system
 spec:
-  dependsOn: selead-secrets
+  dependsOn:
+  - name: selead-secrets
   interval: 10m
   sourceRef:
     kind: GitRepository

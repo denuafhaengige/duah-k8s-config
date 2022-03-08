@@ -21,7 +21,8 @@ metadata:
   name: csi-gcs-storage-classes
   namespace: duah-system
 spec:
-  dependsOn: csi-gcs-installation
+  dependsOn:
+  -name: csi-gcs-installation
   interval: 10m
   sourceRef:
     kind: GitRepository
