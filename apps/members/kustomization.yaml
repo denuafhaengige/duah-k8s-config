@@ -1,0 +1,7 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - members-automation.yaml
+  - members-dep.yaml
+  - members-svc.yaml
+  - members-ingress.yaml

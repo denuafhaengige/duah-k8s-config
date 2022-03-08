@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - streaming-automation.yaml
+  - streaming-front-dep.yaml
+  - streaming-front-svc.yaml
+  - streaming-front-ingress.yaml
+  - streaming-rtmp-input-dep.yaml
+  - streaming-rtmp-input-svc.yaml
+  - streaming-vod-dep.yaml
+  - streaming-vod-svc.yaml

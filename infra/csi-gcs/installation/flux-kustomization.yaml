@@ -9,6 +9,7 @@ spec:
   retryInterval: 5m
   path: ./deploy/overlays/stable-gke/
   prune: true
+  wait: true
   sourceRef:
     kind: GitRepository
     name: csi-gcs

@@ -13,4 +13,5 @@ spec:
     namespace: flux-system
   path: ./infra/deploy
   prune: true
+  wait: true
   timeout: 5m

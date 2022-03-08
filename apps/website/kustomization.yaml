@@ -1,0 +1,7 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - website-automation.yaml
+  - website-dep.yaml
+  - website-svc.yaml
+  - website-ingress.yaml
