@@ -6,7 +6,7 @@ metadata:
   namespace: duah-system
 spec:
   interval: 10m
-  retryInterval: 10s
+  retryInterval: 5m
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -24,7 +24,7 @@ spec:
   dependsOn:
   - name: csi-gcs-installation
   interval: 10m
-  retryInterval: 10s
+  retryInterval: 5m
   sourceRef:
     kind: GitRepository
     name: flux-system

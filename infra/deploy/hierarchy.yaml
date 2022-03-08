@@ -42,7 +42,7 @@ spec:
   dependsOn:
   - name: sealed-secrets
   interval: 10m
-  retryInterval: 10s
+  retryInterval: 5m
   sourceRef:
     kind: GitRepository
     name: flux-system
