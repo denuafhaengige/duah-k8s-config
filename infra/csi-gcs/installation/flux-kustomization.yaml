@@ -6,8 +6,10 @@ metadata:
   namespace: duah-system
 spec:
   interval: 10m0s
+  retryInterval: 10s
   path: ./deploy/overlays/stable-gke/
   prune: true
   sourceRef:
     kind: GitRepository
     name: csi-gcs
+    namespace: flux-system
