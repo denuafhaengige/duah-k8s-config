@@ -1,0 +1,31 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: gcloud-sqlproxy
+  namespace: duah-system
+spec:
+  chart:
+    spec:
+      chart: gcloud-sqlproxy
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: gcloud-sqlproxy
+      version: '>=0.22.6'
+  install:
+    crds: Create
+  interval: 1h0m0s
+  releaseName: gcloud-sqlproxy
+  targetNamespace: duah-system
+  upgrade:
+    crds: CreateReplace
+  values:
+    existingSecret: duah-sql-sa-key
+    existingSecretKey: key
+    cloudsql:
+      instances:
+      - instance: duah-postgresql-instance-bgcn
+        project: denuafhaengige
+        region: europe-north1
+        port: 5432
