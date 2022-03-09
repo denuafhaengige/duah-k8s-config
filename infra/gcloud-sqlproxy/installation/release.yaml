@@ -29,3 +29,5 @@ spec:
         project: denuafhaengige
         region: europe-north1
         port: 5432
+    extraArgs:
+      enable_iam_login: true
