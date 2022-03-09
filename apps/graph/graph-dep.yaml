@@ -51,6 +51,11 @@ spec:
             configMapKeyRef:
               name: duah-shared-conf
               key: force-database-schema-sync
+        - name: DUAH_DATABASE_DISABLE_SSL
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: database-disable-ssl
         - name: DUAH_FILE_STORAGE_PATH
           valueFrom:
             configMapKeyRef:

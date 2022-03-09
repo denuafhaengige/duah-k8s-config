@@ -17,6 +17,7 @@ data:
   aad-react-application-client-id: 68026159-c560-45f1-9ac3-9fd6dbcb4b54
   aad-react-redirect-url: https://admin.denuafhaengige.dk
   force-database-schema-sync: "false"
+  database-disable-ssl: "true"
   file-storage-path: /mnt/shared-storage
   file-storage-url-path: /files
   redis-host: redis-master.duah-system

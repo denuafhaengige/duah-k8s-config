@@ -36,6 +36,11 @@ spec:
             secretKeyRef:
               name: duah-shared-secret
               key: database-uri
+        - name: DUAH_DATABASE_DISABLE_SSL
+          valueFrom:
+            configMapKeyRef:
+              name: duah-shared-conf
+              key: database-disable-ssl
         - name: DUAH_REDIS_HOST
           valueFrom:
             configMapKeyRef:
