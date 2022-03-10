@@ -6,7 +6,7 @@ Repository containing fluxv2 compatible cluster provisioning manifests.
 
 Running the following example bootstraps a cluster, making it ready to receive traffic within 10min.
 
-```cli
+```console
 x@y:~$ export GITHUB_TOKEN=<YOUR_GITHUB_TOKEN>
 x@y:~$ export GITHUB_USER=<YOUR_GITHUB_USER>
 x@y:~$ flux bootstrap github \                    

@@ -6,7 +6,7 @@ metadata:
   labels:
     app: duah-email
 spec:
-  replicas: 0
+  replicas: 1
   strategy:
     rollingUpdate:
       maxUnavailable: 0
