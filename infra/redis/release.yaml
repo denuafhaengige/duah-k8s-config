@@ -21,6 +21,8 @@ spec:
   upgrade:
     crds: CreateReplace
   values:
+    global:
+      storageClass: regional-pd-ssd-storageclass
     auth:
       enabled: false
     architecture: standalone
