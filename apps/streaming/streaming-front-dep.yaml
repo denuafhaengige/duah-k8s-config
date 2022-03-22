@@ -23,7 +23,7 @@ spec:
       - name: duah-ghcr-pull-secret
       containers:
       - name: duah-live-front
-        image: ghcr.io/denuafhaengige/duah-streaming:master-47f5f13-1646659498 # {"$imagepolicy": "duah-apps:duah-streaming-image-policy"}
+        image: ghcr.io/denuafhaengige/duah-streaming:master-503cdfb-1647936212 # {"$imagepolicy": "duah-apps:duah-streaming-image-policy"}
         imagePullPolicy: IfNotPresent
         args:
         - --mode
