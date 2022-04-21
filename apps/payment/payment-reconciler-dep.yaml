@@ -98,8 +98,8 @@ spec:
           protocol: TCP
         resources:
           limits:
-            cpu: 32m
-            memory: 128Mi
+            cpu: 512m
+            memory: 512Mi
           requests:
             cpu: 16m
             memory: 32Mi
