@@ -23,7 +23,7 @@ spec:
       - name: duah-ghcr-pull-secret
       containers:
       - name: duah-payment
-        image: ghcr.io/denuafhaengige/duah-payment:master-c284d6e-1652651573 # {"$imagepolicy": "duah-apps:duah-payment-image-policy"}
+        image: ghcr.io/denuafhaengige/duah-payment:master-0a6aaed-1653810253 # {"$imagepolicy": "duah-apps:duah-payment-image-policy"}
         args:
         - "--mode"
         - "api"
