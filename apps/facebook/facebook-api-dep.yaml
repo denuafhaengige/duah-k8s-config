@@ -23,7 +23,7 @@ spec:
       - name: duah-ghcr-pull-secret
       containers:
       - name: duah-facebook
-        image: ghcr.io/denuafhaengige/duah-facebook:master-8646be4-1646659558 # {"$imagepolicy": "duah-apps:duah-facebook-image-policy"}
+        image: ghcr.io/denuafhaengige/duah-facebook:master-da25559-1654200965 # {"$imagepolicy": "duah-apps:duah-facebook-image-policy"}
         args:
         - "--mode"
         - "api"
