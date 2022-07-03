@@ -23,7 +23,7 @@ spec:
       - name: duah-ghcr-pull-secret
       containers:
       - name: duah-website
-        image: ghcr.io/denuafhaengige/duah-website:master-690ea30-1655380721 # {"$imagepolicy": "duah-apps:duah-website-image-policy"}
+        image: ghcr.io/denuafhaengige/duah-website:master-77f916d-1656484295 # {"$imagepolicy": "duah-apps:duah-website-image-policy"}
         imagePullPolicy: IfNotPresent
         env:
         - name: DUAH_LISTENING_PORT
